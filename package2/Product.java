@@ -1,10 +1,11 @@
-
 public class Product {
-    int productId;
-    String name;
-    double price;
-    int stock;
-    AVLTree <Integer,Integer> reviews = new AVLTree <Integer,Integer> ();
+    private int productId;
+    private String name;
+    private double price;
+    private int stock;
+
+    // reviews as Review objects (Phase 2)
+    private AVLTree<Integer, Review> reviews = new AVLTree<>();
 
     public Product() {
         this.productId = 0;
@@ -20,82 +21,62 @@ public class Product {
         this.stock = s;
     }
 
-    public int getProductId() {
-        return productId;
+    // getters + setters
+    public int getProductId() { return productId; }
+    public void setProductId(int productId) { this.productId = productId; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
+
+    public void addStock(int value) { this.stock += value; }
+    public void removeStock(int value) { this.stock -= value; }
+
+    // REVIEW OPERATIONS
+    public void addReview(Review r) {
+        if (r != null)
+            reviews.insert(r.getReviewId(), r);
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public boolean removeReview(int reviewId) {
+        return reviews.removeKey(reviewId);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public void addStock ( int stock)
-    {
-        this.stock += stock;
-    }
-    
-    public void removeStock ( int stock)
-    {
-        this.stock -= stock;
-    }
-    
-    
-    public void addReview( Integer R)
-    {
-        reviews.insert(R, R);
-    }
-    
-    public boolean removeReview( Integer R)
-    {
-        return reviews.removeKey(R);
-    }
-    
-    public AVLTree<Integer,Integer> getReviews ()
-    {
+    public AVLTree<Integer, Review> getReviews() {
         return reviews;
     }
-    
+
+   //a
+    public double getAverageRating() {
+        if (reviews.empty()) return 0;
+
+        int[] sum = {0};
+        int[] count = {0};
+
+        reviews.inOrder((key, reviewObj) -> {
+            sum[0] += reviewObj.getRating();
+            count[0]++;
+        });
+
+        return (count[0] == 0) ? 0 : (double) sum[0] / count[0];
+    }
+
     @Override
     public String toString() {
-        String str =  "\nproductId=" + productId + ", name=" + name + ", price=" + price ;
-        if ( stock == -1)
-            str += "\nProduct had been Archived, not avialable for use ";
-        else
-            str += ", stock=" + stock; 
-        if ( ! reviews.empty())
-        {
-            str += "(reviews List : " ;
-            str += reviews;
-            str += " )";
-        }
-        return str;        
+        return "\nProduct { ID=" + productId +
+               ", Name=" + name +
+               ", Price=" + price +
+               ", Stock=" + stock +
+               ", Reviews=" + reviews.toString() +
+               " }";
     }
-    
-    public String getDataToFile()
-    {
-        return productId + ", " + name + ", " + price + ", " + stock; 
+
+    public String getDataToFile() {
+        return productId + "," + name + "," + price + "," + stock;
     }
 }
