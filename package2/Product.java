@@ -4,7 +4,7 @@ public class Product {
     private double price;
     private int stock;
 
-    // reviews as Review objects (Phase 2)
+   //a
     private AVLTree<Integer, Review> reviews = new AVLTree<>();
 
     public Product() {
@@ -21,7 +21,7 @@ public class Product {
         this.stock = s;
     }
 
-    // getters + setters
+  
     public int getProductId() { return productId; }
     public void setProductId(int productId) { this.productId = productId; }
 
@@ -37,7 +37,7 @@ public class Product {
     public void addStock(int value) { this.stock += value; }
     public void removeStock(int value) { this.stock -= value; }
 
-    // REVIEW OPERATIONS
+    
     public void addReview(Review r) {
         if (r != null)
             reviews.insert(r.getReviewId(), r);
@@ -51,7 +51,7 @@ public class Product {
         return reviews;
     }
 
-   //a
+    
     public double getAverageRating() {
         if (reviews.empty()) return 0;
 
