@@ -8,7 +8,7 @@ public class productsManager {
     public static AVLTree<Integer, Product> productsIDs = new AVLTree<>();
     public static AVLTree<Integer, Product> productsArchived = new AVLTree<>();
 
-    //a==============================================================
+    //==============================================================
     public AVLTree<Integer, Product> getproductsIDs() {
         return productsIDs;
     }
