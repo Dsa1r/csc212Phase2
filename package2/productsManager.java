@@ -8,7 +8,7 @@ public class productsManager {
     public static AVLTree<Integer, Product> productsIDs = new AVLTree<>();
     public static AVLTree<Integer, Product> productsArchived = new AVLTree<>();
 
-    //==============================================================
+    //a==============================================================
     public AVLTree<Integer, Product> getproductsIDs() {
         return productsIDs;
     }
@@ -243,7 +243,7 @@ public class productsManager {
         Product[] arr = new Product[allProducts.size()];
         allProducts.toArray(arr);
 
-        // sort by average rating (descending)
+     
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = i + 1; j < arr.length; j++) {
 
