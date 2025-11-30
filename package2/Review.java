@@ -1,5 +1,3 @@
-
-
 public class Review {
     int reviewId;
     int productID;
