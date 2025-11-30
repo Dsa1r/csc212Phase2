@@ -375,7 +375,7 @@ public class Main {
             }
             new_order.setCustomerRefrence(cid);
             Customer cus = customers.retrieve();
-            cus.addOrder(oid);
+            cus.addOrder(new_order);
             customers.update(cus);
             System.out.println("Order-" + oid + " placed for customer-" + cid );
 
