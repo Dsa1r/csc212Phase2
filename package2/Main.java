@@ -602,102 +602,58 @@ public class Main {
     //=================================================================
     //Given two customers IDs, show a list of common products that have been 
     //reviewed with an average rating of more than 4 out of 5.
-    public static void commonProducts( int cid1 , int cid2)
-    {
-        LinkedList<Integer> pcustomer1 = new LinkedList<Integer> ();
-        LinkedList <Integer> pcustomer2 = new LinkedList <Integer> ();
-        
-        //1. find all products for customer1 1 and customer 2 that are reviewd
-        // for each customer in linked list 
-        reviews = rdata.getreviewsData();
-        
-        if (! reviews.empty())
-        {
+    public static void commonProducts(int cid1, int cid2) {
+    LinkedPQ<Product> highRatedProducts = new LinkedPQ<Product>();
+
+    // Get all products from AVL tree using inorder traversal
+    LinkedList<Product> allProducts = products.inOrdertraverseData();
+    
+    if (!allProducts.empty()) {
+        allProducts.findFirst();
+        for (int i = 0; i < allProducts.size(); i++) {
+            Product product = allProducts.retrieve();
+            int productId = product.getProductId();
+
+            // Check if both customers reviewed this product
+            boolean customer1Reviewed = false;
+            boolean customer2Reviewed = false;
+
             reviews.findFirst();
-            for (int i =1 ;i <= reviews.size() ; i++)
-            {
-                if (reviews.retrieve().getCustomer() == cid1 )
-                {
-                    pcustomer1.findFirst();
-                    boolean found1 = false;
-                    for (int x = 1; x <= pcustomer1.size() ; x++)
-                    {
-                        if (pcustomer1.retrieve() == reviews.retrieve().getProduct())
-                        {
-                            found1 = true;
-                            break;
-                        }
-                        pcustomer1.findNext();
-                    }
-                    pcustomer1.findLast();
-                    if (! found1 )
-                        pcustomer1.insert(reviews.retrieve().getProduct());
-                }
-                
-                if (reviews.retrieve().getCustomer() == cid2 )
-                {
-                    pcustomer2.findFirst();
-                    boolean found2 = false;
-                    for (int x = 1; x <= pcustomer2.size() ; x++)
-                    {
-                        if (pcustomer2.retrieve() == reviews.retrieve().getProduct())
-                        {
-                            found2 = true;
-                            break;
-                        }
-                        pcustomer2.findNext();
-                    }
-                    
-                    pcustomer2.findLast();
-                    if (! found2 )
-                        pcustomer2.insert(reviews.retrieve().getProduct());
+            for (int j = 0; j < reviews.size(); j++) {
+                Review review = reviews.retrieve();
+                if (review.getProduct() == productId) {
+                    if (review.getCustomer() == cid1)
+                        customer1Reviewed = true;
+                    if (review.getCustomer() == cid2)
+                        customer2Reviewed = true;
                 }
                 reviews.findNext();
             }
-            
-            // find common products for both lists
-            // add common after finding avg rate > 4 in new linked list
-            LinkedPQ<Product> AVGrate45 = new LinkedPQ<Product> ();
-            if (! pcustomer1.empty() && ! pcustomer2.empty())
-            {
-                pcustomer1.findFirst();
-                for ( int m =1; m <= pcustomer1.size() ; m++)
-                {
-                    int pID = pcustomer1.retrieve();
-                    pcustomer2.findFirst();
-                    for (int n = 1 ; n <= pcustomer2.size() ; n++)
-                    {
-                        if ( pID == pcustomer2.retrieve())
-                        {
-                            float AVGrating = avgRating (pID);
-                            if ( AVGrating >= 4)
-                            {
-                                Product p = pdata.getProductData(pID);
-                                AVGrate45.enqueue(p, AVGrating);
-                            }
-                        }
-                        pcustomer2.findNext();
-                    }
-                    pcustomer1.findNext();
-                }                
-            
-                // printing common products
-                System.out.println("Common Products with rate above 4 are ");
-                while (AVGrate45.length() > 0)
-                {
-                    PQElement<Product> product_rate = AVGrate45.serve();
-                    System.out.println(" Product (" + product_rate.data.productId + ") " + product_rate.data.getName() + " with rate " + product_rate.priority );
-                    System.out.println(product_rate.data);
-                    System.out.println("\n");
+
+            // If both reviewed it and average rating >= 4, add to results
+            if (customer1Reviewed && customer2Reviewed) {
+                float avgRating = avgRating(productId);
+                if (avgRating >= 4) {
+                    highRatedProducts.enqueue(product, avgRating);
                 }
             }
-            else
-                System.out.println("NO COMMON products between the two customers ");
+
+            allProducts.findNext();
         }
-        else
-            System.out.println("Reviews not available for all products");
     }
-    
+
+    // Display results
+    if (highRatedProducts.length() > 0) {
+        System.out.println("Common Products with average rate above 4 are:");
+        while (highRatedProducts.length() > 0) {
+            PQElement<Product> productRate = highRatedProducts.serve();
+            System.out.println("Product (" + productRate.data.getProductId() + ") " +
+                    productRate.data.getName() + " with average rate " + productRate.priority);
+        }
+    } else {
+        System.out.println("No common products found with rating 4 or higher between these customers.");
+    }
+}
     
     //=================================================================
     /**
