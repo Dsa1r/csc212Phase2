@@ -320,21 +320,18 @@ public class AVLTree<K extends Comparable<K>, T>{
 
 
     // return string all data of the tree inorder traversal
+   
     @Override
-    public String toString() {
-        String str = inOrdersTraversal(root );
-        str = str.replace(str.substring(str.length()-2), "");
-        return "{" + str + "}";
+public String toString() {
+    String str = inOrdersTraversal(root);
+    
+    // Safely remove the last "; " if it exists
+    if (str.length() >= 2 && str.endsWith("; ")) {
+        str = str.substring(0, str.length() - 2);
     }
-
-    private String inOrdersTraversal(AVLNode<K, T>  node)
-    {
-        if (node == null)
-            return "" ;
-        return (inOrdersTraversal(node.left ) + " "
-        + node.data + "; "        
-        + inOrdersTraversal(node.right));
-    }
+    
+    return "{" + str + "}";
+}
   
     // a mthodd to print just keys in order traversal
     public void printKeys()
@@ -342,6 +339,26 @@ public class AVLTree<K extends Comparable<K>, T>{
         private_printKeys(root);
     }
     
+    private String inOrdersTraversal(AVLNode<K, T> node) {
+    if (node == null)
+        return "";
+    
+    String left = inOrdersTraversal(node.left);
+    String current = node.data.toString();
+    String right = inOrdersTraversal(node.right);
+    
+    // Build the string without trailing semicolon
+    StringBuilder result = new StringBuilder();
+    if (!left.isEmpty()) {
+        result.append(left).append("; ");
+    }
+    result.append(current);
+    if (!right.isEmpty()) {
+        result.append("; ").append(right);
+    }
+    
+    return result.toString();
+}
     private void private_printKeys(AVLNode<K, T>  node)
     {
         if (node == null)
