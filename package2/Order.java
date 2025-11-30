@@ -35,6 +35,9 @@ public class Order {
     public String getStatus() { return status; }
 
     public void setStatus(String status) { this.status = status; }
+    public void setOrderId(int id) { orderId = id; }
+    public void setCustomerRefrence(int cid) { customerRefrence = cid; }
+     public void setTotal_price(double price) { total_price = price; }
     public void setDate(LocalDate date) { this.date = date; }
 
     public void addProduct(Integer product) {
@@ -65,4 +68,27 @@ public class Order {
         str += " }";
         return str;
     }
+  public String getDataToFile() {
+    StringBuilder productIds = new StringBuilder();
+    
+    // Get all product IDs from the AVL tree
+    LinkedList<Integer> productList = products.inOrdertraverseData();
+    
+    if (!productList.empty()) {
+        productList.findFirst();
+        while (!productList.last()) {
+            productIds.append(productList.retrieve()).append(";");
+            productList.findNext();
+        }
+        productIds.append(productList.retrieve());
+    }
+    
+    // Format: orderId,customerRefrence,"product1;product2;...",total_price,date,status
+    return orderId + "," + 
+           customerRefrence + "," + 
+           "\"" + productIds.toString() + "\"," + 
+           total_price + "," + 
+           date + "," + 
+           status;
+}
 }

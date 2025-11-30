@@ -583,7 +583,7 @@ public class Main {
             {
                 
                 Product p = allProducts.retrieve();
-                float AVGrating = avgRating (p.productId);
+                float AVGrating = avgRating (p.getProductId());
                 top3.enqueue(p, AVGrating);
                 
                 allProducts.findNext();
