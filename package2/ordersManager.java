@@ -1,5 +1,5 @@
 public class ordersManager {
-//a
+
     public static Scanner input = new Scanner(System.in);
     public static AVLTree<Integer, Order> orders = new AVLTree<>();
 
