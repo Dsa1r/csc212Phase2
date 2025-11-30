@@ -2,7 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class LinkedList<T>{
-    
+
+        // for class node
             class Node<T> {
             public T data;
             public Node<T> next;
@@ -14,7 +15,8 @@ public class LinkedList<T>{
                 data = val;
                 next = null;
             }
-            // Setters/Getters...
+                
+            // Setters and Getters if needed
 
             public T getData() {
                 return data;
@@ -34,7 +36,7 @@ public class LinkedList<T>{
 
         }
     
-    // class Linked List
+    // for class Linked List
     private Node<T> head;
     private Node<T> current;
     int size;
@@ -73,14 +75,16 @@ public class LinkedList<T>{
                 current = current.next;
         }
     }
-    
+    // a mthod to to retrieve
     public T retrieve () {
             return current.data;
     }
+    
     public void update (T val) {
             current.data = val;
     }
     
+  // a method to insert  
     public void insert (T val) {
             Node<T> tmp;
             if (empty()) {
@@ -95,7 +99,8 @@ public class LinkedList<T>{
             }
             size++ ;
     }
-   
+
+    // a method to remove
     public void remove () {
             if (current == head) {
                     head = head.next;
@@ -115,6 +120,8 @@ public class LinkedList<T>{
                     current = current.next;
             size --;
     }
+
+    
     public void print()
     {
         if ( head == null)
@@ -131,7 +138,8 @@ public class LinkedList<T>{
         }
         System.out.println("");
     }
-    //==============================================================
+
+    
     public void LoadToFile ( String fileName)
     {
         
