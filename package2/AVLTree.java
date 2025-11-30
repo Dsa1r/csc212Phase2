@@ -7,18 +7,16 @@ import java.util.NoSuchElementException;
 
 public class AVLTree<K extends Comparable<K>, T>{
 
-        /*==================================================================
-            class BSTMapNode
-        ==================================================================*/
+//first we start with creat node class amd methods
         class AVLNode<K extends Comparable<K>, T> {
                 public K key;
                 public T data;
-                AVLNode<K,T> parent; // pointer to the parent
-                AVLNode<K,T> left; // pointer to left child
-                AVLNode<K,T> right; // pointer to right child
-                int bf; // balance factor of the node
+                AVLNode<K,T> parent; 
+                AVLNode<K,T> left; //left child
+                AVLNode<K,T> right; //right child
+                int bf; //balance factor 
 
-                    /** Creates a new instance of BTNode */
+
                     public AVLNode() {
                             this.key = null;  
                             this.data = null;
@@ -63,7 +61,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                     }
             }
 
-        //=============================================================================    
+      
         private AVLNode<K,T> root;
         private AVLNode<K,T>  curr;
         private int count;
@@ -82,14 +80,14 @@ public class AVLTree<K extends Comparable<K>, T>{
         }
 
 
-         // Removes all elements in the map.
+         //a mrthod to Remove all elements in the map
         public void clear()
         {
             root = curr = null;
             count = 0;
         }
 
-        // Return the key and data of the current element
+        // a method to Return the key and data of the current element
         public T retrieve()
         {
             T data =null;
@@ -98,16 +96,15 @@ public class AVLTree<K extends Comparable<K>, T>{
             return data;
         }
 
-        // Update the data of current element.
+        // a mrthod to Update the data of current element
         public void update(T e)
         {
             if (curr != null)
                 curr.data = e;
         }
 
-        //searches for the key in the AVL, returns the data or null (if not found).
+        // a method to search for the key in the AVL, returns the data or null
         private T searchTreeHelper(AVLNode<K,T> node, K key) {
-                   // Place your code here\\
                     if (node == null)
                         return null;
                     else if (node.key.compareTo(key) ==0) 
@@ -121,7 +118,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                          return searchTreeHelper(node.right, key);
         }
         
-        // update the balance factor the node
+        // a method to update the balance factor the node
         private void updateBalance(AVLNode<K,T> node) {
                 if (node.bf < -1 || node.bf > 1) {
                         rebalance(node);
@@ -143,7 +140,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                 }
         }
 
-        // rebalance the tree
+        // till we can rebalance the tree
         void rebalance(AVLNode<K,T> node) {
                 if (node.bf > 0) {
                         if (node.right.bf < 0) {
@@ -217,7 +214,7 @@ public class AVLTree<K extends Comparable<K>, T>{
         }
 
         
-        
+        // a method to insert 
         public boolean insert(K key, T data) {
             AVLNode<K,T> node = new AVLNode<K,T>(key, data);
 
@@ -246,11 +243,11 @@ public class AVLTree<K extends Comparable<K>, T>{
             }
             count ++;
 
-            //  re-balance the node if necessary
+            //  re-balance the node 
             updateBalance(node);
             return true;        
         }
-        
+    // a mrthod to remove    
     public boolean removeKey(K key) {
         K k1 = key;
         AVLNode<K,T>  p = root;
@@ -321,10 +318,8 @@ public class AVLTree<K extends Comparable<K>, T>{
         return false;
     }
 
-    //==============================================================
+
     // return string all data of the tree inorder traversal
-    //==============================================================
-    
     @Override
     public String toString() {
         String str = inOrdersTraversal(root );
@@ -341,9 +336,7 @@ public class AVLTree<K extends Comparable<K>, T>{
         + inOrdersTraversal(node.right));
     }
   
-    //==============================================================
-    // print just keys in order traversal
-    //==============================================================
+    // a mthodd to print just keys in order traversal
     public void printKeys()
     {
         private_printKeys(root);
@@ -359,9 +352,8 @@ public class AVLTree<K extends Comparable<K>, T>{
         
     }
 
-    //==============================================================
-    // print just keys in order traversal
-    //==============================================================
+
+    // a methid to print keys in order traversal
     public void printKeys_Data()
     {
         private_printKeys_Data(root);
@@ -379,9 +371,8 @@ public class AVLTree<K extends Comparable<K>, T>{
         
     }
 
-    //==============================================================
-    // print just keys in order traversal
-    //==============================================================
+
+    // a method to print just keys in order traversal
     public void printData()
     {
         private_printData(root);
@@ -398,9 +389,8 @@ public class AVLTree<K extends Comparable<K>, T>{
         
     }
     
-    //==============================================================
-    // return list of all data of the tree inorder traversal
-    //==============================================================
+
+    // a method to return list of all data of the tree inorder traversal
     public LinkedList<T>  inOrdertraverseData() {
         LinkedList<T> data = new LinkedList<T>();
         private_inOrdertraverseData( root , data);
@@ -416,9 +406,8 @@ public class AVLTree<K extends Comparable<K>, T>{
         private_inOrdertraverseData(node.right, data);
     }
   
-    //==============================================================
-    // search for interval between two keys k1 , and k2
-    //==============================================================
+
+    // to search for interval between two keys k1 , and k2
     public LinkedList <T> intervalSearch(K k1, K k2)
     {
         LinkedList <T> q = new LinkedList <T>();
@@ -441,9 +430,8 @@ public class AVLTree<K extends Comparable<K>, T>{
          }
     }   
     
-    //==============================================================
-    // search for interval orders between two dates
-    //==============================================================
+
+    // to search for interval orders between two dates
     public AVLTree <Date,T> intervalSearchDate(LocalDate k1, LocalDate k2)
     {
         AVLTree <Date,T> q = new AVLTree <Date,T>();
@@ -473,9 +461,9 @@ public class AVLTree<K extends Comparable<K>, T>{
             
          }
     }   
-    //==============================================================
-    // find all products out of stock in order traversal
-    //==============================================================
+
+        
+    // a method to find all products out of stock in order traversal
     public void inOrdertraverseOutStock() {
         System.out.println("Products out of stock");
         System.out.println("====================");
@@ -493,9 +481,8 @@ public class AVLTree<K extends Comparable<K>, T>{
                 System.out.println(node.data);
         private_inOrdertraverseOutStock(node.right);
     }
-    //==============================================================
-    // search for interval between two data price k1 , and k2
-    //==============================================================
+
+        // a method to search for interval between two data price k1 , and k2
     public LinkedList <T> intervalSearchprice(double k1, double k2)
     {
         LinkedList <T> q = new LinkedList <T>();
@@ -519,7 +506,7 @@ public class AVLTree<K extends Comparable<K>, T>{
          }
     }   
     
-    //==============================================================
+
     public void LoadToFile ( String fileName)
     {
         
