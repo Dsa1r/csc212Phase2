@@ -53,18 +53,32 @@ public class Product {
 
     
     public double getAverageRating() {
-        if (reviews.empty()) return 0;
+    if (reviews.empty()) return 0;
 
-        int[] sum = {0};
-        int[] count = {0};
-
-        reviews.inOrder((key, reviewObj) -> {
-            sum[0] += reviewObj.getRating();
-            count[0]++;
-        });
-
-        return (count[0] == 0) ? 0 : (double) sum[0] / count[0];
+    // Get all reviews as a linked list
+    LinkedList<Review> allReviews = reviews.inOrdertraverseData();
+    
+    if (allReviews.empty()) return 0;
+    
+    int sum = 0;
+    int count = 0;
+    
+    // Traverse the linked list and calculate sum and count
+    allReviews.findFirst();
+    while (!allReviews.last()) {
+        Review review = allReviews.retrieve();
+        sum += review.getRating();
+        count++;
+        allReviews.findNext();
     }
+    
+    // Process the last element
+    Review review = allReviews.retrieve();
+    sum += review.getRating();
+    count++;
+    
+    return (double) sum / count;
+}
 
     @Override
     public String toString() {

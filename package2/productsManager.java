@@ -240,10 +240,8 @@ public class productsManager {
         }
 
        
-        Product[] arr = new Product[allProducts.size()];
-        allProducts.toArray(arr);
-
-     
+        Product[] arr = allProducts.toArray();
+       
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = i + 1; j < arr.length; j++) {
 
@@ -262,4 +260,6 @@ public class productsManager {
                                " (Avg Rating = " + arr[i].getAverageRating() + ")");
         }
     }
+
+    
 }
