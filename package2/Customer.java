@@ -1,12 +1,10 @@
-import java.time.LocalDate;
-import java.util.Date;
-
-
 public class Customer {
-    int customerId;
-    String name;
-    String email;
-    AVLTree<Integer,Integer> orders = new AVLTree<Integer,Integer> ();
+    private int customerId;
+    private String name;
+    private String email;
+
+    
+    private AVLTree<Integer, Order> orders = new AVLTree<>();
 
     public Customer() {
         this.customerId = 0;
@@ -20,6 +18,7 @@ public class Customer {
         this.email = email;
     }
 
+ 
     public int getCustomerId() {
         return customerId;
     }
@@ -43,38 +42,40 @@ public class Customer {
     public void setEmail(String email) {
         this.email = email;
     }
+
     
-    public AVLTree<Integer,Integer> getOrders ()
-    {
-       return orders;
+    public AVLTree<Integer, Order> getOrders() {
+        return orders;
     }
+
     
-    public void addOrder ( int order)
-    {
-        orders.insert(order,order);
+    public void addOrder(Order order) {
+        if (order != null) {
+            orders.insert(order.getOrderId(), order);
+        }
     }
-    
-    
-      public boolean removeOrder( int R)
-    {
-        return orders.removeKey(R);
+
+
+    public boolean removeOrder(int orderId) {
+        return orders.removeKey(orderId);
     }
-    
-    
+
     @Override
     public String toString() {
-        String str =  "\nCustomers{" + "customerId=" + customerId + ", name=" + name + ", email=" + email ;
-        if ( ! orders.empty())
-        {
-            str += "(orders List : " ;
-            str += orders.toString();
+        String str = "\nCustomer { ID=" + customerId + 
+                     ", Name=" + name + 
+                     ", Email=" + email;
+
+        if (!orders.empty()) {
+            str += ", Orders: " + orders.toString();
         }
-        str +=  " }";
-        return str;        
+
+        str += " }";
+        return str;
     }
-    
-    public String getDataToFile()
-    {
-        return customerId + ", " + name + ", " + email; 
+
+
+    public String getDataToFile() {
+        return customerId + "," + name + "," + email;
     }
 }
