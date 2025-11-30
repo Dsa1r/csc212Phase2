@@ -1,5 +1,5 @@
 public class ordersManager {
-
+//a
     public static Scanner input = new Scanner(System.in);
     public static AVLTree<Integer, Order> orders = new AVLTree<>();
 
@@ -18,7 +18,7 @@ public class ordersManager {
                 int oid = Integer.parseInt(data[0]);
                 int cid = Integer.parseInt(data[1]);
 
-                
+                // Product IDs in CSV
                 String pp = data[2].replaceAll("\"", "");
                 String[] p = pp.split(";");
 
