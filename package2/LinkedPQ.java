@@ -16,8 +16,7 @@ public class LinkedPQ<T> {
                 priority = p;
         }
 
-        // Setters/Getters?
-
+        // setters and getters if needed
         public T getData() {
             return data;
         }
@@ -43,8 +42,8 @@ public class LinkedPQ<T> {
     private int size;
     private PQNode<T> head;
 
-
-    /* tail is of no use here. */
+ 
+// we dont need tail 
     public LinkedPQ() {
             head = null;
             size = 0;
@@ -58,6 +57,7 @@ public class LinkedPQ<T> {
             return false;
     }
 
+ // a method to enqueue
     public void enqueue(T e, float pty) {
             PQNode<T> tmp = new PQNode<T>(e, pty);
             if((size == 0) || (pty > head.priority)) {
@@ -76,7 +76,7 @@ public class LinkedPQ<T> {
             }
             size++;
     }
-
+// a method to serve 
     public PQElement<T> serve(){
             PQNode<T> node = head;
             PQElement<T> pqe=new PQElement<T>(node.data,node.priority);
