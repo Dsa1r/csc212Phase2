@@ -30,17 +30,17 @@ public class Main {
     {
      
         int choice;
-        System.out.println("1. Add new product");
-        System.out.println("2. Remove product");
-        System.out.println("3. Update product (name, price, stock)");
-        System.out.println("4. Search By ID");
-        System.out.println("5. Search products by name");
+        System.out.println("1. Add New Product");
+        System.out.println("2. Remove a Product");
+        System.out.println("3. Update a Product (name, price, stock)");
+        System.out.println("4. Search Product by ID");
+        System.out.println("5. Search Product by Name");
         System.out.println("6. List All Products Within a Price Range[minPrice, maxPrice]");
-        System.out.println("7. Track all Out-stock products");
-        System.out.println("8. Display All Customers Who Reviewed specific product sorted by RATING.");
-        System.out.println("9. Display All Customers Who Reviewed specific product sorted by CUSTOMER ID.");
-        System.out.println("10. Print all Products.");
-        System.out.println("11. Return Main menu");
+        System.out.println("7. Track All Out-Of-Stock Products");
+        System.out.println("8. Display All Customers Who Reviewed Specific Product Sorted by RATING");
+        System.out.println("9. Display All Customers Who Reviewed Specific Product Sorted by CUSTOMER ID");
+        System.out.println("10. Print All Products");
+        System.out.println("11. Return to Main Menu");
         System.out.println("Enter your choice");
         choice = input.nextInt();
         switch (choice)
@@ -67,18 +67,18 @@ public class Main {
             
             case 6:
             {
-                System.out.println("Enter range [minPrice, maxPrice] :");
-                System.out.println("minPrice :");
+                System.out.println("Enter range [minPrice, maxPrice]:");
+                System.out.println("minPrice:");
                 double minPrice = input.nextDouble();
-                System.out.println("maxPrice :");
+                System.out.println("maxPrice:");
                 double maxPrice = input.nextDouble();
                 
                 while (minPrice >= maxPrice)
                 {
-                    System.out.println("Re-enter range [minPrice less than maxPrice] :");
-                    System.out.println("minPrice :");
+                    System.out.println("Re-enter range [minPrice must be less than maxPrice]:");
+                    System.out.println("minPrice:");
                     minPrice = input.nextDouble();
-                    System.out.println("maxPrice :");
+                    System.out.println("maxPrice:");
                     maxPrice = input.nextDouble();
                 }
                 LinkedList<Product> data = pdata.getPriceRange(minPrice, maxPrice);
@@ -102,7 +102,7 @@ public class Main {
                 break;
                 
             case 10:
-                pdata.getproductsIDs().printKeys_Data();
+                products.printData();
                 break;
         
             case 11:
@@ -117,7 +117,7 @@ public class Main {
     public static void Customers_Reviewed_product_sort_RATING()
     {
         LinkedPQ<Customer> Rating = new LinkedPQ<Customer> ();
-        products = pdata.getproductsIDs();
+        
         
         System.out.println("Enter product ID :");
         int pID =input.nextInt();
@@ -194,13 +194,13 @@ public class Main {
     {
         int choice;
         System.out.println("1. Register new customer");
-        System.out.println("2. Search for Customer (IDs)");
+        System.out.println("2. Search Customer by ID");
         System.out.println("3. Place New Order for specific customer");
-        System.out.println("4. View Order history  for specific customer");
+        System.out.println("4. View Order history for specific customer");
         System.out.println("5. List All Customers Sorted Alphabetically.");
         System.out.println("6. Extract reviews from a specific customer for all products.");
         System.out.println("7. List All Cusomers");
-        System.out.println("8. Return Main menu");
+        System.out.println("8. Return to Main menu");
         System.out.println("Enter your choice");
         choice = input.nextInt();;
         switch (choice)
@@ -224,7 +224,7 @@ public class Main {
                 AllReviewsForCustomer();
                 break;
             case 7:
-                customers.printKeys_Data();
+                customers.printData();
                 break;
             case 8:
                 break;
@@ -262,23 +262,26 @@ public class Main {
                 System.out.println("No reviews for customer " + cid);
             else
             {
+                int count=0;
                 selectedReviews.findFirst();
                 while ( ! selectedReviews.last())
                 {
-                    System.out.println(selectedReviews.retrieve());
+                    count++;
+                    System.out.println(count +":"+ selectedReviews.retrieve());
                     if (products.find(selectedReviews.retrieve().getProduct()))
                         System.out.println(products.retrieve());
                     else
-                        System.out.println("No data for Product, Had been deleted and archived before.");
+                        System.out.println("Product has been deleted!");
                     System.out.println("");
                     
                     selectedReviews.findNext();
                 }
-                System.out.println(selectedReviews.retrieve());
+                count++;
+                System.out.println(count+":"+selectedReviews.retrieve());
                 if (products.find(selectedReviews.retrieve().getProduct()))
                     System.out.println(products.retrieve());
                 else
-                    System.out.println("No data for Product, Had been deleted and archived before.");
+                    System.out.println("Product has been deleted!");
                 System.out.println("");
 
             }
@@ -292,9 +295,9 @@ public class Main {
         System.out.println("1. Place New Order");
         System.out.println("2. Cancel Order");
         System.out.println("3. Update Order status");
-        System.out.println("4. Search By ID(log n)");
-        System.out.println("5. All orders between two dates");
-        System.out.println("6. Return Main menu");
+        System.out.println("4. Search By ID");
+        System.out.println("5. List All orders between two dates");
+        System.out.println("6. Return to Main menu");
         System.out.println("Enter your choice");
         choice = input.nextInt();
         
@@ -358,7 +361,7 @@ public class Main {
             int oid = input.nextInt();
             while ( orders.find(oid))
             {
-                System.out.println("Re-enter order id, is available , try again");
+                System.out.println("ُEntered ID is already used, Re-enter order id");
                 oid = input.nextInt();
             }
             new_order.setOrderId(oid);
@@ -367,14 +370,14 @@ public class Main {
             int cid = input.nextInt();
             while(! customers.find(cid))
             {
-                System.out.println("Re-enter customer ID, is not available , try again");
+                System.out.println("No such customer ID, Re-enter customer ID");
                 cid = input.nextInt();
             }
             new_order.setCustomerRefrence(cid);
             Customer cus = customers.retrieve();
             cus.addOrder(oid);
             customers.update(cus);
-            System.out.println("Customer (" + cid + ") replaced order (" + oid + ")" );
+            System.out.println("Order-" + oid + " placed for customer-" + cid );
 
             char answer = 'y';
             while (answer == 'y' || answer == 'Y')
@@ -399,7 +402,7 @@ public class Main {
                         }
                 }
                 else
-                    System.out.println("  No such product id");
+                    System.out.println("No such product ID");
                     
                 
                 System.out.println("Do you want to continue adding product? (Y/N)");
@@ -408,12 +411,12 @@ public class Main {
             
             new_order.setTotal_price(total_price);
             
-            System.out.println("Enter first date (dd/mm/yyyy)");
+            System.out.println("Enter order date (dd/mm/yyyy)");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate Ldate = LocalDate.parse(input.next(), formatter);
             new_order.setDate(Ldate);
      
-            System.out.println("Enter new status  (pending, shipped, delivered)....");
+            System.out.println("Enter order status  (pending, shipped, delivered)");
             new_order.setStatus(input.next());
             
             orders.insert(new_order.getOrderId(), new_order);
@@ -426,9 +429,9 @@ public class Main {
     public static void ReviewsMenu()
     {
         System.out.println("1. Add review");
-        System.out.println("2. Edit review (rating , comment");
+        System.out.println("2. Edit review (rating - comment)");
         System.out.println("3. Get an average rating for product");
-        System.out.println("4. Show the Top 3 Highest AVG Rated Products _new");
+        System.out.println("4. Show the Top 3 Highest AVG Rated Products");
         System.out.println("5. Show the Top 3 Most Reviewed.");
         System.out.println("6. Common products with an average rating 4 and more between 2 cusomers");
         System.out.println("7. Return Main menu");
@@ -449,7 +452,7 @@ public class Main {
 
                 while (!products.find(pid))
                 {
-                    System.out.println("Re- Enter product id again (ID is not available)...");
+                    System.out.println("ID is not available, Re-Enter ID");
                     pid = input.nextInt();
                 }
                 float AVG = avgRating(pid);
