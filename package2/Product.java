@@ -4,7 +4,7 @@ public class Product {
     private double price;
     private int stock;
 
-   //a
+   
     private AVLTree<Integer, Review> reviews = new AVLTree<>();
 
     public Product() {
