@@ -3,7 +3,7 @@ public class Customer {
     private String name;
     private String email;
 
-    
+    // A
     private AVLTree<Integer, Order> orders = new AVLTree<>();
 
     public Customer() {
@@ -18,7 +18,7 @@ public class Customer {
         this.email = email;
     }
 
- 
+   
     public int getCustomerId() {
         return customerId;
     }
@@ -43,19 +43,19 @@ public class Customer {
         this.email = email;
     }
 
-    
+    // Return the AVL tree of orders
     public AVLTree<Integer, Order> getOrders() {
         return orders;
     }
 
-    
+
     public void addOrder(Order order) {
         if (order != null) {
             orders.insert(order.getOrderId(), order);
         }
     }
 
-
+  
     public boolean removeOrder(int orderId) {
         return orders.removeKey(orderId);
     }
