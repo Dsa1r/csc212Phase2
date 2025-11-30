@@ -1,142 +1,61 @@
-import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Scanner;
-
-
 public class ordersManager {
-    
-    public static Scanner input = new Scanner (System.in);
-    
-    public static AVLTree <Integer, Order> orders = new AVLTree <Integer, Order> ();
-    
-//==============================================================
-    public AVLTree <Integer, Order>  getordersData ( )
-    {
-        return orders;
-    }
-    
-//==============================================================
-    public ordersManager ( String fileName , AVLTree<Integer , Customer> customers )
-    {
-        try{
-                File docsfile = new File(fileName);
-                Scanner reader = new Scanner (docsfile);
-                String line = reader.nextLine();
+
+    public static Scanner input = new Scanner(System.in);
+    public static AVLTree<Integer, Order> orders = new AVLTree<>();
+
+    public ordersManager(String fileName, 
+                         AVLTree<Integer, Customer> customers, 
+                         AVLTree<Integer, Product> products) {
+        try {
+            File file = new File(fileName);
+            Scanner r = new Scanner(file);
+            String header = r.nextLine();
+
+            while (r.hasNext()) {
+                String line = r.nextLine();
+                String[] data = line.split(",");
+
+                int oid = Integer.parseInt(data[0]);
+                int cid = Integer.parseInt(data[1]);
+
                 
-                while(reader.hasNext())
-                {
-                    line = reader.nextLine();
-                    String [] data = line.split(","); 
-                    int oid = Integer.parseInt(data[0]);
-                    int cid = Integer.parseInt(data[1]);
-                    
-                    String  pp =  data[2].replaceAll("\"", "");
-                    String [] p = pp.split(";");
-                    Integer [] pids = new Integer [p.length];
-                    for ( int i = 0 ; i< pids.length ; i++)
-                        pids[i] = new Integer(Integer.parseInt(p[i].trim()));
-                    double price = Double.parseDouble(data[3]);
-                    String date = data[4];
-                    String status = data[5];
-                            
-                    Order order = new Order(oid, cid, pids, price, date, status );
-                    orders.insert(oid, order);
-                    
-                    if (customers.find(cid))
-                    {
-                        Customer c = customers.retrieve();
-                        c.addOrder(oid);
-                        customers.update(c);
-                    }
+                String pp = data[2].replaceAll("\"", "");
+                String[] p = pp.split(";");
+
+                Product[] productList = new Product[p.length];
+                for (int i = 0; i < p.length; i++) {
+                    int pid = Integer.parseInt(p[i].trim());
+                    if (products.find(pid))
+                        productList[i] = products.retrieve();
                 }
-                reader.close();
-            }
-            catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-     }
 
-    //==============================================================
-    public void cancelOrder (int oid)
-    {
-        if ( orders.find(oid))
-        {
-            if (orders.retrieve().getStatus().compareToIgnoreCase("cancelled") == 0)
-                System.out.println("Order " + orders.retrieve().getOrderId() + " was cancelled before");
-            else
-            {
-                Order data = orders.retrieve();
-                data.setStatus("cancelled");
-                orders.update(data);
-                System.out.println("Order " + data.getOrderId() + " hed been cancelled Now");
+                double price = Double.parseDouble(data[3]);
+                String date = data[4];
+                String status = data[5];
+
+                Order order = new Order(oid, cid, productList, price, date, status);
+                orders.insert(oid, order);
+
+                if (customers.find(cid)) {
+                    Customer c = customers.retrieve();
+                    c.addOrder(order); // IMPORTANT FIX
+                    customers.update(c);
+                }
             }
+            r.close();
         }
-        else
-            System.out.println("could not find Order ID");
-    }
-    
-    //==============================================================
-    public boolean UpdateOrder( int orderID)
-    {
-        if ( orders.find(orderID))
-        {
-            if ( orders.retrieve().getStatus().compareToIgnoreCase("cancelled") == 0)
-            {
-                System.out.println("could not change status for cancelled order");
-                return false;
-            }
-            Order obj = orders.retrieve();
-            String status = obj.getStatus();
-
-            System.out.println("Status of order is " + orders.retrieve().getStatus() );
-            System.out.println("Enter new status  (pending, shipped, delivered)....");
-            String str = input.next();  
-
-            while ((str.compareToIgnoreCase("pending") != 0  ) &&
-                    (str.compareToIgnoreCase("shipped") != 0  ) &&
-                    (str.compareToIgnoreCase("delivered") != 0  ))
-            {
-                System.out.println("bad status , try again ");
-                System.out.println("Enter new status  (pending, shipped, delivered)....");
-                str = input.next();  
-            }
-
-            obj.setStatus(str);
-            orders.update(obj);
-
-            System.out.println("Order (" + orderID + ")  had beeen updated to " + orders.getClass());
-            return true;
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
-        
-        System.out.println("No such Order ID");
-        return false;
     }
-    
-    //==================================================================    
-    public Order searchOrderID(int orderID)
-    {
-        if (orders.find(orderID))
+
+    public boolean checkOrderID(int oid) {
+        return orders.find(oid);
+    }
+
+    public Order searchOrderID(int id) {
+        if (orders.find(id))
             return orders.retrieve();
         return null;
-    }
-
-    //==================================================================    
-    public AVLTree<Date, Order> BetweenTwoDates(String date1, String date2)
-    {
-        AVLTree<Date, Order> ordersbetweenDates = new AVLTree<Date, Order>();
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate Ldate1 = LocalDate.parse(date1, formatter);
-        LocalDate Ldate2 = LocalDate.parse(date2, formatter);
-        ordersbetweenDates = orders.intervalSearchDate(Ldate1, Ldate2);
-        
-        return ordersbetweenDates;
-   }
-    //==================================================================    
-    public boolean checkOrderID(int oid)
-    {
-        return orders.find(oid);
     }
 }
