@@ -1,124 +1,119 @@
 import java.io.File;
 import java.util.Scanner;
 
-
 public class customersManager {
     
-    public static Scanner input = new Scanner (System.in);
-    public static AVLTree<Integer, Customer> customersIDs = new AVLTree<Integer, Customer> ();
-    public static AVLTree<String, Customer> customersNames = new AVLTree<String, Customer> ();
+    public static Scanner input = new Scanner(System.in);
+    public static AVLTree<Integer, Customer> customersIDs = new AVLTree<>();
+    public static AVLTree<String, Customer> customersNames = new AVLTree<>();
    
- //==============================================================
-    public AVLTree<Integer, Customer> getcustomersIDs ( )
-    {
+    //==============================================================
+    public AVLTree<Integer, Customer> getcustomersIDs() {
         return customersIDs;
     }
 
- //==============================================================
-    public AVLTree<String, Customer> getcustomersNames ( )
-    {
+    //==============================================================
+    public AVLTree<String, Customer> getcustomersNames() {
         return customersNames;
     }
    
-    
-//==============================================================
-    public customersManager(String fileName)
-    {
-            try{
-                File docsfile = new File(fileName);
-                Scanner reader = new Scanner (docsfile);
-                String line = reader.nextLine();
+    //==============================================================
+    public customersManager(String fileName) {
+        try {
+            File docsfile = new File(fileName);
+            Scanner reader = new Scanner(docsfile);
+            String line = reader.nextLine(); 
+            
+            while (reader.hasNext()) {
+                line = reader.nextLine();
+                String[] data = line.split(",");
                 
-                while(reader.hasNext())
-                {
-                    line = reader.nextLine();
-                    String [] data = line.split(","); 
-                    Customer customer = new Customer(Integer.parseInt(data[0]),data[1], data[2] );
-                    customersIDs.insert(customer.customerId, customer);
-                    customersNames.insert(customer.name, customer);
-                }
-                reader.close();
+                int id = Integer.parseInt(data[0].trim());
+                String name = data[1].trim();
+                String email = data[2].trim();
+                
+                Customer customer = new Customer(id, name, email);
+
+                // USE GETTERS (important)
+                customersIDs.insert(customer.getCustomerId(), customer);
+                customersNames.insert(customer.getName(), customer);
             }
-            catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
+            reader.close();
+        }  
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
   
-//==============================================================
-public void RegisterCustomer()
-{
-    Customer customer = new Customer ();
+    //==============================================================
+    public void RegisterCustomer() {
+        Customer customer = new Customer();
 
-    System.out.println("Enter customer ID : ");
-    customer.setCustomerId(input.nextInt());
-    
-    while (customersIDs.find(customer.getCustomerId()))
-    {
-        System.out.println("Re-Enter agian, ID already avialable: ");
+        System.out.println("Enter customer ID : ");
         customer.setCustomerId(input.nextInt());
-    }    
-    
-    System.out.println("Enter customer Name : ");
-    String name = input.nextLine();
-    name = input.nextLine();
-    customer.setName(name);
-    
-    System.out.println("Enter customer Email : ");
-    customer.setEmail(input.nextLine());
+        
+        while (customersIDs.find(customer.getCustomerId())) {
+            System.out.println("Re-Enter again, ID already available: ");
+            customer.setCustomerId(input.nextInt());
+        }    
+        
+        System.out.println("Enter customer Name : ");
+        input.nextLine();
+        customer.setName(input.nextLine());
+        
+        System.out.println("Enter customer Email : ");
+        customer.setEmail(input.nextLine());
 
-    customersIDs.insert(customer.customerId, customer);
-    customersNames.insert(customer.name, customer);
-}
+        customersIDs.insert(customer.getCustomerId(), customer);
+        customersNames.insert(customer.getName(), customer);
+    }
     
-//==============================================================
-public void OrderHistory()
-{
-        if (customersIDs.empty())
+    //==============================================================
+    public void OrderHistory() {
+        if (customersIDs.empty()) {
             System.out.println("empty Customers data");
-        else
-        {
-            System.out.println("Enter customer ID: ");
-            int customerID = input.nextInt();
+            return;
+        }
+
+        System.out.println("Enter customer ID: ");
+        int customerID = input.nextInt();
+        
+        if (customersIDs.find(customerID)) {
+            Customer c = customersIDs.retrieve();
             
-            if (customersIDs.find(customerID))
-            {
-                if (customersIDs.retrieve().getOrders().empty())
-                    System.out.println("No Order History for " + customersIDs.retrieve().getCustomerId());
-                else
-                {
-                    System.out.println("Order History");
-                    System.out.println(customersIDs.retrieve().getOrders());
-                }
+            if (c.getOrders().empty()) {
+                System.out.println("No Order History for " + c.getCustomerId());
+            } else {
+                System.out.println("Order History:");
+                System.out.println(c.getOrders()); 
             }
-            else
-                System.out.println("No such customer ID");
+        } 
+        else {
+            System.out.println("No such customer ID");
         }
     }
     
-//==============================================================
-    public Customer getCustomerID()
-    {
-        if (customersIDs.empty())
+    //==============================================================
+    public Customer getCustomerID() {
+        if (customersIDs.empty()) {
             System.out.println("empty Customers data");
-        else
-        {
-            System.out.println("Enter customer ID: ");
-            int customerID = input.nextInt();
+            return null;
+        }
 
-            if (customersIDs.find(customerID))
-            {
-                System.out.println(customersIDs.retrieve());
-                return customersIDs.retrieve();
-            }
+        System.out.println("Enter customer ID: ");
+        int customerID = input.nextInt();
+
+        if (customersIDs.find(customerID)) {
+            System.out.println(customersIDs.retrieve());
+            return customersIDs.retrieve();
         }
         
         System.out.println("No such customer ID");
         return null;
     }
     
-//==============================================================
-    public void printNamesAlphabetically()
-    {
+    //==============================================================
+    public void printNamesAlphabetically() {
         customersNames.printKeys();
     }
 }
