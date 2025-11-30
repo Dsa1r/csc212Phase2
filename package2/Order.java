@@ -2,11 +2,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-
 public class Order {
     int orderId;
     int customerRefrence;
-    AVLTree <Integer,Integer> products = new AVLTree <Integer,Integer> ();  
+    AVLTree<Integer, Integer> products = new AVLTree<Integer, Integer>();
     double total_price;
     LocalDate date;
     String status; // (pending, shipped, delivered, cancelled)
@@ -18,15 +17,15 @@ public class Order {
         this.status = "";
     }
 
-    public Order(int orderId, int customerRefrence, Integer [] pids, double total_price, String date, String status) {
+    public Order(int orderId, int customerRefrence, Integer[] pids, double total_price, String date, String status) {
         this.orderId = orderId;
         this.customerRefrence = customerRefrence;
         this.total_price = total_price;
         this.date = LocalDate.parse(date);
         this.status = status;
-        
-        for (int i = 0 ; i < pids.length ; i++)
-          products.insert(pids[i],pids[i]);
+
+        for (int i = 0; i < pids.length; i++)
+            products.insert(pids[i], pids[i]);
     }
 
     public int getOrderId() {
@@ -37,7 +36,7 @@ public class Order {
         return customerRefrence;
     }
 
-    public AVLTree<Integer,Integer> getProducts() {
+    public AVLTree<Integer, Integer> getProducts() {
         return products;
     }
 
@@ -77,44 +76,45 @@ public class Order {
         this.status = status;
     }
 
-    public void addProduct (Integer product )
-    {
+    public void addProduct(Integer product) {
         products.insert(product, product);
     }
 
-    public boolean removeProduct( Integer P)
-    {
-        return products.removeKey(P);
+    public boolean removeProduct(Integer p) {
+        return products.removeKey(p);
     }
+
    
+    public boolean isDateBetween(LocalDate start, LocalDate end) {
+        return (!date.isBefore(start) && !date.isAfter(end));
+    }
+
     @Override
     public String toString() {
-        String str =  "\nOrder{" + "orderId=" + orderId + ", customer Refrence=" + customerRefrence 
-                + ",total price=" + total_price 
+        String str = "\nOrder{" + "orderId=" + orderId + ", customer Refrence=" + customerRefrence
+                + ",total price=" + total_price
                 + " , status =" + status
                 + ", date =" + date;
-        if ( ! products.empty())
-        {
-            str += "( products List" ;
+
+        if (!products.empty()) {
+            str += "( products List";
             str += products;
             str += " )";
         }
-        str +=  " }";
-        return str;        
+        str += " }";
+        return str;
     }
 
-    public String getDataToFile()
-    {
+    public String getDataToFile() {
         String str = "";
-        if ( ! products.empty())
-        {
+        if (!products.empty()) {
             str += products;
         }
-        
+
         str = str.replaceAll(", ", "; ");
-        
+
         return orderId + ", " + customerRefrence + ", " + str
-                    + ", " + total_price + ", " + date + ", " + status;
+                + ", " + total_price + ", " + date + ", " + status;
     }
 
 }
